@@ -1,0 +1,15 @@
+{
+  "name": "cc-bridge",
+  "version": "1.0.0",
+  "description": "HTTP bridge — lets docker-host (192.0.2.20) interface with Claude Code sessions on workstation (192.0.2.10)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.63",
+    "express": "^4.18.2",
+    "ws": "^8.19.0"
+  }
+}

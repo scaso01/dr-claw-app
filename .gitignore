@@ -1,0 +1,26 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+**/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+*.keystore
+!debug.keystore
+.env
+secrets.properties
+version.properties
+/cc-bridge/node_modules/
+/cc-bridge/data/
+/cc-bridge/logs/
+/cc-bridge/cc-bridge*.log
+/cc-bridge/*.sync-conflict-*
+/data/
+hs_err_pid12472.log
+
+# graphify output
+graphify-out/
+.graphifyignore

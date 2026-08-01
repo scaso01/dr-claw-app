@@ -1,0 +1,17 @@
+node_modules/
+*.sync-conflict-*
+build_log.txt
+cc_test*.txt
+
+# NSSM service logs
+cc-bridge*.log
+cc-bridge-err*.log
+
+# Runtime data (title cache etc.)
+data/
+
+# One-off scripts
+move*.ps1
+cleanup.ps1
+install_service.ps1
+SESSION_LOG.md

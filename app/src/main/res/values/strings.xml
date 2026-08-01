@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dr. CLAW</string>
+    <string name="accessibility_service_description">Dr. CLAW UI analysis service. Reads screen content for LLM-driven automation with human-in-the-loop confirmation for all actions.</string>
+</resources>
