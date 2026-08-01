@@ -49,15 +49,15 @@ class ProjectsViewModel @Inject constructor(
     )
 
     val uiState: StateFlow<ProjectsUiState> = combine(
-        repository.jobHunterStatus,
+        repository.examplePipelineStatus,
         repository.isLoading,
         repository.error,
         appPreferences.recentPaths,
         _cwdState,
-    ) { jobHunter, isLoading, error, recentPaths, cwdState ->
+    ) { examplePipeline, isLoading, error, recentPaths, cwdState ->
         val projects = ALL_PROJECTS.map { info ->
-            if (info.statusRpcSupported && info.name == "JobHunter") {
-                ProjectState(info = info, status = jobHunter)
+            if (info.statusRpcSupported && info.name == "ExamplePipeline") {
+                ProjectState(info = info, status = examplePipeline)
             } else {
                 ProjectState(info = info)
             }
@@ -81,12 +81,12 @@ class ProjectsViewModel @Inject constructor(
     }
 
     fun refresh() {
-        repository.loadJobHunterStatus()
+        repository.loadExamplePipelineStatus()
     }
 
-    fun triggerJobHunter() {
+    fun triggerExamplePipeline() {
         viewModelScope.launch {
-            repository.triggerJobHunter()
+            repository.triggerExamplePipeline()
             kotlinx.coroutines.delay(2_000)
             refresh()
         }

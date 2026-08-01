@@ -17,7 +17,7 @@ class CcBridgeModelsTest {
     fun `deserializes full CcSession`() {
         val raw = """{
             "sessionId": "sess-001",
-            "project": "jobhunter",
+            "project": "example-pipeline",
             "branch": "main",
             "shortId": "s001",
             "machine": "docker-host",
@@ -27,7 +27,7 @@ class CcBridgeModelsTest {
         }"""
         val session = json.decodeFromString(CcSession.serializer(), raw)
         assertEquals("sess-001", session.sessionId)
-        assertEquals("jobhunter", session.project)
+        assertEquals("example-pipeline", session.project)
         assertEquals("main", session.branch)
         assertEquals("s001", session.shortId)
         assertEquals("docker-host", session.machine)
@@ -305,8 +305,8 @@ class CcBridgeModelsTest {
             "status": "running",
             "sdkSessionId": "sdk-xyz",
             "config": {
-                "project": "jobhunter",
-                "cwd": "/home/user/projects/jobhunter",
+                "project": "example-pipeline",
+                "cwd": "/home/user/projects/example-pipeline",
                 "backend": "local",
                 "model": "qwen3.5",
                 "permissionMode": "bypassPermissions",
@@ -325,8 +325,8 @@ class CcBridgeModelsTest {
         assertEquals(1711234567890L, session.lastActivityAt)
 
         val config = session.config!!
-        assertEquals("jobhunter", config.project)
-        assertEquals("/home/user/projects/jobhunter", config.cwd)
+        assertEquals("example-pipeline", config.project)
+        assertEquals("/home/user/projects/example-pipeline", config.cwd)
         assertEquals("local", config.backend)
         assertEquals("qwen3.5", config.model)
         assertEquals("bypassPermissions", config.permissionMode)

@@ -200,7 +200,7 @@ fun CreateSessionDialog(
                         value = project,
                         onValueChange = { project = it },
                         label = { Text("Project name") },
-                        placeholder = { Text("e.g. JobHunter") },
+                        placeholder = { Text("e.g. ExamplePipeline") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                     )

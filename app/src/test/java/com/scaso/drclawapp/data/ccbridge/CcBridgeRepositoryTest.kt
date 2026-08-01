@@ -144,7 +144,7 @@ class CcBridgeRepositoryTest {
             },
             {
                 "sessionId": "bridge-2",
-                "project": "jobhunter",
+                "project": "example-pipeline",
                 "status": "idle",
                 "lastActivity": "2026-03-24T09:00:00Z"
             }

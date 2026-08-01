@@ -83,7 +83,7 @@ class ProjectsScreenExhaustiveTest {
                 .onAllNodes(hasText("error", substring = true, ignoreCase = true))
                 .fetchSemanticsNodes()
             val projectCards = composeTestRule
-                .onAllNodes(hasText("JobHunter", substring = true))
+                .onAllNodes(hasText("ExamplePipeline", substring = true))
                 .fetchSemanticsNodes()
             title.isNotEmpty() || errorState.isNotEmpty() || projectCards.isNotEmpty()
         }

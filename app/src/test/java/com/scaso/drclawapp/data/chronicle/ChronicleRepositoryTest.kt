@@ -163,7 +163,7 @@ class ChronicleRepositoryTest {
     @Test
     fun `getTopics parses topics array`() = runTest {
         val payload = json.parseToJsonElement(
-            """{"topics": [{"name": "jobhunter", "session_count": 3}]}""",
+            """{"topics": [{"name": "example-pipeline", "session_count": 3}]}""",
         )
         fakeClient.nextResponse = ResponseFrame(id = "1", ok = true, payload = payload)
 
@@ -171,7 +171,7 @@ class ChronicleRepositoryTest {
             skipItems(1)
             repository.getTopics()
             val result = awaitItem()
-            assertEquals("jobhunter", result[0].name)
+            assertEquals("example-pipeline", result[0].name)
             assertEquals(3, result[0].sessionCount)
             cancelAndIgnoreRemainingEvents()
         }
@@ -208,7 +208,7 @@ class ChronicleRepositoryTest {
     @Test
     fun `getInsights parses insights payload`() = runTest {
         val payload = json.parseToJsonElement(
-            """{"totalSessions": 10, "current_focus": [{"project": "jobhunter", "session_count": 2}]}""",
+            """{"totalSessions": 10, "current_focus": [{"project": "example-pipeline", "session_count": 2}]}""",
         )
         fakeClient.nextResponse = ResponseFrame(id = "1", ok = true, payload = payload)
 
@@ -217,7 +217,7 @@ class ChronicleRepositoryTest {
             repository.getInsights()
             val result = awaitItem()
             assertEquals(10, result!!.totalSessions)
-            assertEquals("jobhunter", result.currentFocus[0].project)
+            assertEquals("example-pipeline", result.currentFocus[0].project)
             cancelAndIgnoreRemainingEvents()
         }
     }

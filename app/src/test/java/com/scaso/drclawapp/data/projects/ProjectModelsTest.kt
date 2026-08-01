@@ -99,7 +99,7 @@ class ProjectModelsTest {
     @Test
     fun `deserializes full ProjectStatusResponse`() {
         val raw = """{
-            "project": "jobhunter",
+            "project": "example-pipeline",
             "status": "running",
             "lastRun": {
                 "timestamp": 1700000000,
@@ -116,7 +116,7 @@ class ProjectModelsTest {
             }
         }"""
         val response = json.decodeFromString(ProjectStatusResponse.serializer(), raw)
-        assertEquals("jobhunter", response.project)
+        assertEquals("example-pipeline", response.project)
         assertEquals(ProjectStatus.RUNNING, response.status)
         assertEquals(100, response.lastRun!!.jobsScraped)
         assertEquals("matching", response.pipeline!!.stage)

@@ -127,11 +127,11 @@ fun ProjectsScreen(
 
             items(uiState.projects, key = { it.info.name }) { projectState ->
                 if (projectState.info.statusRpcSupported) {
-                    JobHunterCard(
+                    ExamplePipelineCard(
                         project = projectState.info,
                         status = projectState.status,
                         isLoading = uiState.isLoading,
-                        onTrigger = viewModel::triggerJobHunter,
+                        onTrigger = viewModel::triggerExamplePipeline,
                     )
                 } else {
                     ProjectCard(project = projectState.info)
@@ -332,7 +332,7 @@ private fun ProjectCard(project: ProjectInfo) {
 }
 
 @Composable
-private fun JobHunterCard(
+private fun ExamplePipelineCard(
     project: ProjectInfo,
     status: ProjectStatusResponse,
     isLoading: Boolean,

@@ -61,7 +61,7 @@ val ALL_PROJECTS = listOf(
         // Dashboard is the web version of Dr. CLAW — no need to link from within the app
     ),
     ProjectInfo(
-        name = "JobHunter",
+        name = "ExamplePipeline",
         description = "Job scraper pipeline (3153+ tests)",
         dashboardUrl = "https://$GW:28502",
         statusRpcSupported = true,
@@ -72,7 +72,7 @@ val ALL_PROJECTS = listOf(
         dashboardUrl = "https://dashboard.example.com",
     ),
     ProjectInfo(
-        name = "PaintTrack",
+        name = "ColorCatalog",
         description = "Paint color cataloging app (Android + Web)",
         dashboardUrl = "https://$GW:28085",
     ),
@@ -92,7 +92,7 @@ val ALL_PROJECTS = listOf(
         dashboardUrl = "https://$GW:28088",
     ),
     ProjectInfo(
-        name = "isp-monitor",
+        name = "link-monitor",
         description = "Docker ISP monitoring stack (8 containers)",
         dashboardUrl = "https://$GW:23003",
     ),
@@ -102,7 +102,7 @@ val ALL_PROJECTS = listOf(
         // No proxy — port 28080 is SearXNG on docker-host, not workstation's llama-server
     ),
     ProjectInfo(
-        name = "deco-monitor",
+        name = "mesh-monitor",
         description = "TUI network dashboard for Deco mesh",
     ),
     ProjectInfo(

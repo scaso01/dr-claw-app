@@ -38,15 +38,15 @@ class ProjectRepositoryTest {
     }
 
     @Test
-    fun `initial jobHunterStatus has project name`() {
-        assertEquals("jobhunter", repository.jobHunterStatus.value.project)
+    fun `initial examplePipelineStatus has project name`() {
+        assertEquals("example-pipeline", repository.examplePipelineStatus.value.project)
     }
 
     @Test
-    fun `loadJobHunterStatus populates on success`() = runTest {
+    fun `loadExamplePipelineStatus populates on success`() = runTest {
         val payload = json.encodeToJsonElement(
             ProjectStatusResponse(
-                project = "jobhunter",
+                project = "example-pipeline",
                 status = ProjectStatus.IDLE,
                 lastRun = LastRunSummary(
                     timestamp = 1700000000,
@@ -57,9 +57,9 @@ class ProjectRepositoryTest {
         )
         fakeClient.nextResponse = ResponseFrame(id = "1", ok = true, payload = payload)
 
-        repository.jobHunterStatus.test {
+        repository.examplePipelineStatus.test {
             skipItems(1) // initial
-            repository.loadJobHunterStatus()
+            repository.loadExamplePipelineStatus()
             val result = awaitItem()
             assertEquals(ProjectStatus.IDLE, result.status)
             assertEquals(200, result.lastRun!!.jobsScraped)
@@ -69,7 +69,7 @@ class ProjectRepositoryTest {
     }
 
     @Test
-    fun `loadJobHunterStatus sets error on failure`() = runTest {
+    fun `loadExamplePipelineStatus sets error on failure`() = runTest {
         fakeClient.nextResponse = ResponseFrame(
             id = "1",
             ok = false,
@@ -78,40 +78,40 @@ class ProjectRepositoryTest {
 
         repository.error.test {
             assertNull(awaitItem())
-            repository.loadJobHunterStatus()
+            repository.loadExamplePipelineStatus()
             assertEquals("Project not found", awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `loadJobHunterStatus sets error on exception`() = runTest {
+    fun `loadExamplePipelineStatus sets error on exception`() = runTest {
         fakeClient.shouldThrow = true
 
         repository.error.test {
             assertNull(awaitItem())
-            repository.loadJobHunterStatus()
+            repository.loadExamplePipelineStatus()
             assertEquals("Test project exception", awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `triggerJobHunter returns true on success`() = runTest {
+    fun `triggerExamplePipeline returns true on success`() = runTest {
         fakeClient.nextSendMessageResponse = ResponseFrame(id = "1", ok = true)
-        assertTrue(repository.triggerJobHunter())
+        assertTrue(repository.triggerExamplePipeline())
     }
 
     @Test
-    fun `triggerJobHunter returns false on failure`() = runTest {
+    fun `triggerExamplePipeline returns false on failure`() = runTest {
         fakeClient.nextSendMessageResponse = ResponseFrame(id = "1", ok = false)
-        assertFalse(repository.triggerJobHunter())
+        assertFalse(repository.triggerExamplePipeline())
     }
 
     @Test
-    fun `triggerJobHunter returns false on exception`() = runTest {
+    fun `triggerExamplePipeline returns false on exception`() = runTest {
         fakeClient.shouldThrowOnSend = true
-        assertFalse(repository.triggerJobHunter())
+        assertFalse(repository.triggerExamplePipeline())
     }
 }
 

@@ -22,8 +22,8 @@ class ProjectRepository(
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    private val _jobHunterStatus = MutableStateFlow(ProjectStatusResponse(project = "jobhunter"))
-    val jobHunterStatus: StateFlow<ProjectStatusResponse> = _jobHunterStatus
+    private val _examplePipelineStatus = MutableStateFlow(ProjectStatusResponse(project = "example-pipeline"))
+    val examplePipelineStatus: StateFlow<ProjectStatusResponse> = _examplePipelineStatus
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -31,16 +31,16 @@ class ProjectRepository(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun loadJobHunterStatus() {
+    fun loadExamplePipelineStatus() {
         scope.launch {
             _isLoading.value = true
             _error.value = null
 
             try {
-                val params = buildJsonObject { put("project", "jobhunter") }
+                val params = buildJsonObject { put("project", "example-pipeline") }
                 val response = gatewayClient.sendGenericRequest("project.status", params)
                 if (response.ok && response.payload != null) {
-                    _jobHunterStatus.value = json.decodeFromString(
+                    _examplePipelineStatus.value = json.decodeFromString(
                         ProjectStatusResponse.serializer(),
                         response.payload.toString(),
                     )
@@ -56,11 +56,11 @@ class ProjectRepository(
     }
 
     /**
-     * Trigger a JobHunter run by sending a chat message to the main session.
+     * Trigger a ExamplePipeline run by sending a chat message to the main session.
      */
-    suspend fun triggerJobHunter(): Boolean {
+    suspend fun triggerExamplePipeline(): Boolean {
         return try {
-            val response = gatewayClient.sendMessage("Run JobHunter now")
+            val response = gatewayClient.sendMessage("Run ExamplePipeline now")
             response.ok
         } catch (_: Exception) {
             false

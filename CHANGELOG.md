@@ -356,10 +356,10 @@ Format: [Semantic Versioning](https://semver.org/)
 - Auto-clear completed sub-agents after 5 minutes
 - Long-press "Dismiss" context menu
 
-**JobHunter Trigger + Last Run Summary**
-- `ProjectsScreen` with JobHunter status card, pipeline progress bar when running
+**ExamplePipeline Trigger + Last Run Summary**
+- `ProjectsScreen` with ExamplePipeline status card, pipeline progress bar when running
 - Last run stats: jobs scraped, matched, applied, errors, duration
-- One-tap trigger button (sends "Run JobHunter now" via gateway)
+- One-tap trigger button (sends "Run ExamplePipeline now" via gateway)
 - Navigation drawer entry ("Projects" with work icon)
 
 **File Download**
