@@ -86,6 +86,16 @@ GATEWAY_URL=wss://gateway.example.com
 GATEWAY_TOKEN=the-token-your-gateway-is-configured-with
 ```
 
+Building from the command line rather than Android Studio also needs Gradle
+pointed at your SDK, either through `ANDROID_HOME` or through a `sdk.dir` line in
+`local.properties`, which is gitignored. Android Studio writes that file for you
+on first open, so this step only applies to a plain terminal build:
+
+```bash
+export ANDROID_HOME="$HOME/Android/Sdk"          # macOS and Linux
+setx ANDROID_HOME "%LOCALAPPDATA%\Android\Sdk"   # Windows
+```
+
 Then build and install:
 
 ```bash

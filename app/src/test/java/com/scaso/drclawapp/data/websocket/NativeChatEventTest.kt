@@ -42,6 +42,19 @@ class NativeChatEventTest {
         repository = ChatRepository(fakeClient, scope)
     }
 
+    /**
+     * Suspends until [ChatRepository]'s collector has actually subscribed to
+     * [fakeEvents].
+     *
+     * The repository collects on [Dispatchers.Default], and a SharedFlow with no
+     * replay discards anything emitted while it has no subscriber. Awaiting an item
+     * from `repository.messages` does not establish that subscription, because that
+     * is a separate flow whose initial value arrives the moment Turbine subscribes
+     * to it. Without this wait the first emission is dropped whenever the collector
+     * loses the race, which is load dependent and so fails only sometimes.
+     */
+    private suspend fun awaitCollector() = fakeEvents.subscriptionCount.first { it > 0 }
+
     // -------------------------------------------------------------------------
     // Test 1: NativeToolStart attaches a ToolEvent to the streaming message
     // -------------------------------------------------------------------------
@@ -50,6 +63,7 @@ class NativeChatEventTest {
     fun `NativeToolStart attaches ToolEvent with Running status to streaming message`() = runTest {
         repository.messages.test {
             awaitItem() // initial empty list
+            awaitCollector()
 
             // Start a streaming assistant message first
             fakeEvents.emit(GatewayEvent.ChatDelta(runId = "run-1", text = "Thinking...", seq = 1))
@@ -87,6 +101,7 @@ class NativeChatEventTest {
     fun `NativeToolResult updates matching ToolEvent to Done with output`() = runTest {
         repository.messages.test {
             awaitItem() // initial empty list
+            awaitCollector()
 
             fakeEvents.emit(GatewayEvent.ChatDelta(runId = "run-2", text = "Running tool", seq = 1))
             awaitItem()
@@ -132,6 +147,7 @@ class NativeChatEventTest {
     fun `NativeToolResult with error field sets ToolEvent status to Error`() = runTest {
         repository.messages.test {
             awaitItem()
+            awaitCollector()
 
             fakeEvents.emit(GatewayEvent.ChatDelta(runId = "run-3", text = "...", seq = 1))
             awaitItem()
@@ -173,12 +189,7 @@ class NativeChatEventTest {
     @Test
     fun `NativePermissionRequest is emitted on nativePermissionFlow`() = runTest {
         repository.nativePermissionFlow.test {
-            // ChatRepository collects fakeEvents on Dispatchers.Default, and a
-            // SharedFlow with no replay drops whatever is emitted before its
-            // collector subscribes. The other tests here await an item first, which
-            // hides the race; this one emits immediately, so it only passes when the
-            // machine has spare cores. Wait for the subscription instead.
-            fakeEvents.subscriptionCount.first { it > 0 }
+            awaitCollector()
 
             fakeEvents.emit(
                 GatewayEvent.NativePermissionRequest(
