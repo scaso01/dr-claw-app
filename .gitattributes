@@ -1,0 +1,11 @@
+# Vendored voice assets are verbatim upstream artifacts from the sherpa-onnx
+# tts-models release. Several espeak-ng data files are text, so without this
+# Git rewrites their line endings on a Windows checkout and they stop matching
+# upstream byte for byte. Treating the whole tree as binary keeps it verifiable
+# against the published tarball.
+app/src/main/assets/voices/** -text
+
+# Wrapper and build scripts keep their upstream form too.
+gradle/wrapper/gradle-wrapper.jar binary
+*.aar binary
+*.onnx binary
