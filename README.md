@@ -15,9 +15,9 @@ it at a machine on your LAN, a VPN address, or a hostname behind your own revers
 proxy, and that is the entire backend.
 
 <p align="center">
-  <img src="docs/images/chat.png" alt="Dr. CLAW chat screen with a streamed assistant reply" width="280">
-  <img src="docs/images/sessions.png" alt="Dr. CLAW session list" width="280">
-  <img src="docs/images/settings.png" alt="Dr. CLAW settings screen" width="280">
+  <img src="docs/images/tools.png" alt="Tool registry, each tool tagged with its permission tier" width="270">
+  <img src="docs/images/sessions.png" alt="Session drawer with search and feature navigation" width="270">
+  <img src="docs/images/settings.png" alt="Settings screen showing theme, custom instructions and notifications" width="270">
 </p>
 
 ## Why it exists
