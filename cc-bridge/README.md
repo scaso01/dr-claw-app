@@ -22,7 +22,7 @@ Dr. CLAW App → wss://gateway.example.com/cc/ws → Caddy → cc-bridge :18790
 
 ## Auth
 
-Challenge/response with `CC_BRIDGE_TOKEN` env var (same token as OpenClaw Gateway).
+Challenge/response with the `CC_BRIDGE_TOKEN` env var (the same token the gateway is configured with).
 
 1. Client connects to `ws://host:18790/cc/ws`
 2. Server sends `auth.challenge` event

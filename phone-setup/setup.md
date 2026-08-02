@@ -38,8 +38,8 @@ pkg install -y termux-api
 ```bash
 # Run from a FILE, not piped. `ssh ... 'sh -s' < file` lands on Android's mksh, which spools heredocs
 # to /data/local (no write perm) and dies "can't create temporary file". A seekable file avoids that.
-scp -P 8022 install-device-bridge.sh u0_a711@198.51.100.206:
-ssh -p 8022 u0_a711@198.51.100.206 'chmod +x ~/install-device-bridge.sh && ~/install-device-bridge.sh'
+scp -P 8022 install-device-bridge.sh u0_aNNN@198.51.100.206:
+ssh -p 8022 u0_aNNN@198.51.100.206 'chmod +x ~/install-device-bridge.sh && ~/install-device-bridge.sh'
 ```
 Idempotent. Creates the proot loopback ssh key (authorized in Termux), `$PREFIX/bin/hitl-run.sh`
 (the dialog gate), proot `/usr/local/bin/txr` (runs a Termux cmd from the proot, args preserved),
@@ -64,16 +64,16 @@ Gives the proot agent a shell at **uid 2000 (shell)** — the same power as `adb
 3. Open **Shizuku → Start** (pair via wireless debugging when prompted). The service now runs as uid 2000.
 4. First `shz`/`rish` call triggers a **Shizuku authorization** dialog for Termux → tap **Allow** (one-time).
 
-**Gotcha (learned live 2026-06-25):** you **cannot** start Shizuku from a remote/Meshnet `adb shell`
-one-shot — the server crashes immediately (`AndroidRuntime: Bad file descriptor` in BinderProxy) on
-this Samsung/Android 16 build. Use the **on-device** wireless-debugging start above; it runs from the
-phone's own loopback adb with a clean binder context and persists.
+**Gotcha:** you **cannot** start Shizuku from a remote `adb shell` one-shot on every device. On some
+Android 16 builds the server crashes immediately (`AndroidRuntime: Bad file descriptor` in
+BinderProxy). Use the **on-device** wireless-debugging start above; it runs from the phone's own
+loopback adb with a clean binder context and persists.
 
 `rish` + `shz` themselves are staged by `install-device-bridge.sh` (§3) — rish is extracted straight
 from the installed Shizuku APK (no download), `RISH_APPLICATION_ID=com.termux`, dex chmod 400
 (Android 14+ won't load a writable dex). Verify: `proot-distro login ubuntu -- shz id` → `uid=2000(shell)`.
 
-**sshd persistence (the durable stack — in place + verified 2026-06-25):**
+**sshd persistence (the durable stack):**
 - Termux:Boot script `~/.termux/boot/00-home-away.sh` runs on every boot: `termux-wake-lock` (survive
   Doze) + `sshd` + the cc-bridge tmux. This is the durable mechanism for reboots.
 - `com.termux`, `com.termux.api`, `com.termux.boot` are all battery-whitelisted (`dumpsys deviceidle
@@ -84,7 +84,7 @@ from the installed Shizuku APK (no download), `RISH_APPLICATION_ID=com.termux`, 
 - Manual revive recipe (wireless-adb port rotates per reboot — get it from the phone's Wireless
   debugging screen, or `adb mdns services`): `adb connect <ip:port>` then
   `MSYS_NO_PATHCONV=1 adb -s <ip:port> shell run-as com.termux /data/data/com.termux/files/usr/bin/sshd`.
-- Residual (only if Samsung still kills Termux between reboots): a workstation-side watchdog that finds the
+- Residual (only if your vendor's battery manager still kills Termux between reboots): a workstation-side watchdog that finds the
   phone via `adb mdns services` and re-runs the revive recipe. Not built — add if doze-kills recur.
 
 **Shizuku persistence:** the Shizuku **server** (uid 2000) does NOT survive reboot/Doze on its own — if

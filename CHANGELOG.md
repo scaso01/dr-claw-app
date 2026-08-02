@@ -195,7 +195,7 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.7.1] â€” 2026-02-24
+## [0.7.1] — 2026-02-24
 
 ### Fixed
 - **Plus button sub-agent classification:** New sessions used `agent:main:chat-<ts>` which `isSubAgentKey()` flagged as sub-agent (3 parts, last != "main"). Changed key to `agent:main:user-<ts>` and added `user-` prefix exclusion to `isSubAgentKey()`.
@@ -219,19 +219,19 @@ Format: [Semantic Versioning](https://semver.org/)
 - `AppPreferences` gained `DEFAULT_MODEL` key, `defaultModel` flow, `setDefaultModel()` setter
 
 ### New Files
-- `~/.openclaw/extensions/dr-claw-rpc/index.js` â€” Gateway plugin serving `infra.status` with `defaultModel`
+- `~/.openclaw/extensions/dr-claw-rpc/index.js` — Gateway plugin serving `infra.status` with `defaultModel`
 
 ---
 
-## [0.7.0] â€” 2026-02-24
+## [0.7.0] — 2026-02-24
 
 ### Fixed
 - **New conversation button (plus):** Was calling `resetSession()` which wiped the current session instead of creating a new one. Now generates a truly new session key (`agent:main:chat-<timestamp>`), switches to it, and optimistically adds it to the drawer. Old reset behavior preserved as `resetCurrentSession()` for future use.
 
-### Added â€” Cost & Model Visibility
+### Added — Cost & Model Visibility
 - **Model chip in chat header:** Small chip in the top app bar showing the current session's model name (e.g., `sonnet-4-6`). Only appears when model info is available from the gateway.
-- **Token count + cost per session:** Third line in session drawer items showing total tokens and estimated cost (e.g., "12.4k tok Â· $0.18"). Cost calculated from hardcoded price map for Claude models; hidden for unknown/local models.
-- **Idle-reset indicator:** Grey "cleared" badge next to session title in drawer when `messageCount == 0` and session is older than 5 minutes â€” warns that the conversation was wiped by idle timeout.
+- **Token count + cost per session:** Third line in session drawer items showing total tokens and estimated cost (e.g., "12.4k tok · $0.18"). Cost calculated from hardcoded price map for Claude models; hidden for unknown/local models.
+- **Idle-reset indicator:** Grey "cleared" badge next to session title in drawer when `messageCount == 0` and session is older than 5 minutes — warns that the conversation was wiped by idle timeout.
 
 ### Changed
 - `SessionListEntry` expanded with `inputTokens`, `outputTokens`, `totalTokens`, `modelOverride`, `providerOverride` fields
@@ -244,9 +244,9 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.6.0] â€” 2026-02-23
+## [0.6.0] — 2026-02-23
 
-### Added â€” OpenClaw Responsiveness (Phase 10)
+### Added — OpenClaw Responsiveness (Phase 10)
 
 **Activity Status Bar**
 - New `ActivityStatusBar` composable with pulsing green dot + activity text
@@ -290,11 +290,11 @@ Format: [Semantic Versioning](https://semver.org/)
 - Persisted via DataStore preferences
 
 ### Fixed
-- **chat.inject param:** `ChatInjectParams` used `text` but gateway expects `message` â€” inject was silently failing
-- **Sub-agent drawer filtering:** Drawer received raw session list, bypassing ViewModel's dismiss+max-age filtering â€” now accepts pre-filtered lists
-- **Sub-agent clear-all:** Was calling `clearDismissedSubAgents()` (emptying the dismissed set = un-dismissing) â€” now adds all visible sub-agent keys to dismissed set
-- **Sub-agent title display:** Sub-agents with no derivedTitle/title fell back to "Dr. CLAW" (displayName) â€” now shows key fragment ("Sub-agent abc12345")
-- **Clipboard preview on launch:** Card showed stale clipboard on every app open due to Android clipboard access restrictions before ON_RESUME â€” now tracks ON_PAUSE and only shows card on real foreground returns
+- **chat.inject param:** `ChatInjectParams` used `text` but gateway expects `message` — inject was silently failing
+- **Sub-agent drawer filtering:** Drawer received raw session list, bypassing ViewModel's dismiss+max-age filtering — now accepts pre-filtered lists
+- **Sub-agent clear-all:** Was calling `clearDismissedSubAgents()` (emptying the dismissed set = un-dismissing) — now adds all visible sub-agent keys to dismissed set
+- **Sub-agent title display:** Sub-agents with no derivedTitle/title fell back to "Dr. CLAW" (displayName) — now shows key fragment ("Sub-agent abc12345")
+- **Clipboard preview on launch:** Card showed stale clipboard on every app open due to Android clipboard access restrictions before ON_RESUME — now tracks ON_PAUSE and only shows card on real foreground returns
 
 ### Changed
 - `GatewayEvent` expanded with `Activity` variant for tool use visibility
@@ -309,21 +309,21 @@ Format: [Semantic Versioning](https://semver.org/)
 - `AppPreferences` expanded with `dismissedSubAgents` and `effortLevel` keys/flows/methods
 
 ### New Files
-- `data/model/InterruptContext.kt` â€” context preservation for interrupt+resume
-- `ui/components/ActivityStatusBar.kt` â€” pulsing activity indicator composable
+- `data/model/InterruptContext.kt` — context preservation for interrupt+resume
+- `ui/components/ActivityStatusBar.kt` — pulsing activity indicator composable
 
 ---
 
-## [0.5.1] â€” 2026-02-23
+## [0.5.1] — 2026-02-23
 
 ### Fixed
 - **ClipboardPreview:** Added `OnPrimaryClipChangedListener` so the card hides immediately when the clipboard is cleared while the app is open. Previously only re-checked on `ON_RESUME`, leaving the card stuck with stale content.
 
 ---
 
-## [0.5.0] â€” 2026-02-23
+## [0.5.0] — 2026-02-23
 
-### Added â€” Operations Dashboard (Phase 9)
+### Added — Operations Dashboard (Phase 9)
 
 **ntfy Push Notifications**
 - SSE client (`NtfyClient`) subscribing to self-hosted ntfy server with auto-reconnect and exponential backoff
@@ -337,7 +337,7 @@ Format: [Semantic Versioning](https://semver.org/)
 
 **Multi-Machine Claude Code Session List**
 - `CcSessionsScreen` with pull-to-refresh, machine badges (docker-host=blue, workstation=green)
-- Gateway proxy pattern via `sendGenericRequest()` â€” no direct LAN access needed
+- Gateway proxy pattern via `sendGenericRequest()` — no direct LAN access needed
 - `CcBridgeRepository` + `CcBridgeModels` (CcSession, Machine enum)
 - Navigation drawer entry ("CC Sessions" with computer icon)
 
@@ -396,9 +396,9 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.4.0] â€” 2026-02-23
+## [0.4.0] — 2026-02-23
 
-### Added â€” SESSIONS_BRIEFING Features
+### Added — SESSIONS_BRIEFING Features
 - **Session switcher with sub-agent sections**: drawer now separates main conversations from sub-agent sessions with "SA" badge
 - **Verbose toggle**: eye icon in top bar sends `/verbose on|off` to gateway, controls tool event card visibility
 - **Thinking level selector**: brain icon dropdown (off/low/medium/high) sends `/think <level>` to gateway
@@ -424,11 +424,11 @@ Format: [Semantic Versioning](https://semver.org/)
 - `ChatScreen` includes verbose toggle, thinking menu, reconnect banner, tool event routing
 
 ### New Files
-- `ui/components/ToolEventCard.kt` â€” collapsible tool call/result card
+- `ui/components/ToolEventCard.kt` — collapsible tool call/result card
 
 ---
 
-## [0.3.0] â€” 2026-02-23
+## [0.3.0] — 2026-02-23
 
 ### Fixed
 - AckState lifecycle: messages now show sent (checkmark), processing (pulsing eye), done (double check)
@@ -436,7 +436,7 @@ Format: [Semantic Versioning](https://semver.org/)
 - Action sheet: Share, Regenerate, and Delete buttons now functional
 - Session switch protocol docs corrected (no sessions.switch method)
 
-### Added â€” Feature Integration
+### Added — Feature Integration
 - **Telegram-style input bar**: attachment clip (left), text field (center), context-sensitive right button (mic/send/stop)
 - **Photo/file picker**: pick images and files via system pickers, preview thumbnails before sending
 - **Camera capture**: take photos directly from attachment menu via CameraX
@@ -451,7 +451,7 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.2.1] â€” 2026-02-21
+## [0.2.1] — 2026-02-21
 
 ### Fixed
 - Fix fatal crash when session drawer loads before WebSocket handshake completes
@@ -461,9 +461,9 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.2.0] â€” 2026-02-21
+## [0.2.0] — 2026-02-21
 
-### Added â€” Phases 2-8 (full feature build)
+### Added — Phases 2-8 (full feature build)
 
 **Rich Text (Phase 2)**
 - Markdown rendering via multiplatform-markdown-renderer-m3 v0.28.0
@@ -528,7 +528,7 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [0.1.0] â€” 2026-02-21
+## [0.1.0] — 2026-02-21
 
 ### Added
 - **Phase 1 complete:** WebSocket connection, chat UI, session history, live streaming
