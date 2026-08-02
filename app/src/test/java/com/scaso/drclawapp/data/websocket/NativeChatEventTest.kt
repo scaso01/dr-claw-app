@@ -10,6 +10,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -172,6 +173,13 @@ class NativeChatEventTest {
     @Test
     fun `NativePermissionRequest is emitted on nativePermissionFlow`() = runTest {
         repository.nativePermissionFlow.test {
+            // ChatRepository collects fakeEvents on Dispatchers.Default, and a
+            // SharedFlow with no replay drops whatever is emitted before its
+            // collector subscribes. The other tests here await an item first, which
+            // hides the race; this one emits immediately, so it only passes when the
+            // machine has spare cores. Wait for the subscription instead.
+            fakeEvents.subscriptionCount.first { it > 0 }
+
             fakeEvents.emit(
                 GatewayEvent.NativePermissionRequest(
                     requestId = "req-1",
