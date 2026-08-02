@@ -358,7 +358,7 @@ Format: [Semantic Versioning](https://semver.org/)
 
 **ExamplePipeline Trigger + Last Run Summary**
 - `ProjectsScreen` with ExamplePipeline status card, pipeline progress bar when running
-- Last run stats: jobs scraped, matched, applied, errors, duration
+- Last run stats: items scraped, matched, submitted, errors, duration
 - One-tap trigger button (sends "Run ExamplePipeline now" via gateway)
 - Navigation drawer entry ("Projects" with work icon)
 

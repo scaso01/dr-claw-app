@@ -48,17 +48,17 @@ class ProjectModelsTest {
         val raw = """{
             "timestamp": 1700000000,
             "durationMs": 210000,
-            "jobsScraped": 500,
-            "jobsMatched": 42,
-            "jobsApplied": 10,
+            "itemsScraped": 500,
+            "itemsMatched": 42,
+            "itemsSubmitted": 10,
             "errors": 3
         }"""
         val summary = json.decodeFromString(LastRunSummary.serializer(), raw)
         assertEquals(1700000000L, summary.timestamp)
         assertEquals(210000L, summary.durationMs)
-        assertEquals(500, summary.jobsScraped)
-        assertEquals(42, summary.jobsMatched)
-        assertEquals(10, summary.jobsApplied)
+        assertEquals(500, summary.itemsScraped)
+        assertEquals(42, summary.itemsMatched)
+        assertEquals(10, summary.itemsSubmitted)
         assertEquals(3, summary.errors)
     }
 
@@ -68,9 +68,9 @@ class ProjectModelsTest {
         val summary = json.decodeFromString(LastRunSummary.serializer(), raw)
         assertNull(summary.timestamp)
         assertNull(summary.durationMs)
-        assertEquals(0, summary.jobsScraped)
-        assertEquals(0, summary.jobsMatched)
-        assertEquals(0, summary.jobsApplied)
+        assertEquals(0, summary.itemsScraped)
+        assertEquals(0, summary.itemsMatched)
+        assertEquals(0, summary.itemsSubmitted)
         assertEquals(0, summary.errors)
     }
 
@@ -104,9 +104,9 @@ class ProjectModelsTest {
             "lastRun": {
                 "timestamp": 1700000000,
                 "durationMs": 120000,
-                "jobsScraped": 100,
-                "jobsMatched": 20,
-                "jobsApplied": 5,
+                "itemsScraped": 100,
+                "itemsMatched": 20,
+                "itemsSubmitted": 5,
                 "errors": 0
             },
             "pipeline": {
@@ -118,7 +118,7 @@ class ProjectModelsTest {
         val response = json.decodeFromString(ProjectStatusResponse.serializer(), raw)
         assertEquals("example-pipeline", response.project)
         assertEquals(ProjectStatus.RUNNING, response.status)
-        assertEquals(100, response.lastRun!!.jobsScraped)
+        assertEquals(100, response.lastRun!!.itemsScraped)
         assertEquals("matching", response.pipeline!!.stage)
     }
 
@@ -137,7 +137,7 @@ class ProjectModelsTest {
         val original = ProjectStatusResponse(
             project = "test",
             status = ProjectStatus.IDLE,
-            lastRun = LastRunSummary(timestamp = 100, jobsScraped = 50),
+            lastRun = LastRunSummary(timestamp = 100, itemsScraped = 50),
         )
         val serialized = json.encodeToString(ProjectStatusResponse.serializer(), original)
         val deserialized = json.decodeFromString(ProjectStatusResponse.serializer(), serialized)

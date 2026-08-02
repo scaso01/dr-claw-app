@@ -17,13 +17,22 @@ data class ProjectStatusResponse(
     val pipeline: PipelineStatus? = null,
 )
 
+/**
+ * One completed run of a batch pipeline, as read from its `run_history.json`.
+ *
+ * The three counts describe the usual collect, filter, act shape: how many
+ * records a run took in, how many survived its criteria, and how many it acted
+ * on. A pipeline that does not act on anything simply leaves [itemsSubmitted] at
+ * zero and the UI omits that row. These property names are the JSON keys, since
+ * the gateway forwards the record unchanged.
+ */
 @Serializable
 data class LastRunSummary(
     val timestamp: Long? = null,
     val durationMs: Long? = null,
-    val jobsScraped: Int = 0,
-    val jobsMatched: Int = 0,
-    val jobsApplied: Int = 0,
+    val itemsScraped: Int = 0,
+    val itemsMatched: Int = 0,
+    val itemsSubmitted: Int = 0,
     val errors: Int = 0,
 )
 

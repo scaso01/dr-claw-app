@@ -50,8 +50,8 @@ class ProjectRepositoryTest {
                 status = ProjectStatus.IDLE,
                 lastRun = LastRunSummary(
                     timestamp = 1700000000,
-                    jobsScraped = 200,
-                    jobsMatched = 15,
+                    itemsScraped = 200,
+                    itemsMatched = 15,
                 ),
             ),
         )
@@ -62,8 +62,8 @@ class ProjectRepositoryTest {
             repository.loadExamplePipelineStatus()
             val result = awaitItem()
             assertEquals(ProjectStatus.IDLE, result.status)
-            assertEquals(200, result.lastRun!!.jobsScraped)
-            assertEquals(15, result.lastRun!!.jobsMatched)
+            assertEquals(200, result.lastRun!!.itemsScraped)
+            assertEquals(15, result.lastRun!!.itemsMatched)
             cancelAndIgnoreRemainingEvents()
         }
     }

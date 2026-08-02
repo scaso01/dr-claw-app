@@ -426,10 +426,10 @@ private fun ExamplePipelineCard(
                 if (lastRun.durationMs != null) {
                     StatRow("Duration", formatDuration(lastRun.durationMs))
                 }
-                StatRow("Jobs scraped", "${lastRun.jobsScraped}")
-                StatRow("Jobs matched", "${lastRun.jobsMatched}")
-                if (lastRun.jobsApplied > 0) {
-                    StatRow("Jobs applied", "${lastRun.jobsApplied}")
+                StatRow("Items scraped", "${lastRun.itemsScraped}")
+                StatRow("Items matched", "${lastRun.itemsMatched}")
+                if (lastRun.itemsSubmitted > 0) {
+                    StatRow("Items submitted", "${lastRun.itemsSubmitted}")
                 }
                 if (lastRun.errors > 0) {
                     StatRow("Errors", "${lastRun.errors}")
