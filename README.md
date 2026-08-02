@@ -1,93 +1,170 @@
-# Dr. CLAW App
+# Dr. CLAW
 
-Native Android chat client for the Ironjaw Gateway — a private, self-hosted alternative to the Telegram bot interface.
+[![CI](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml/badge.svg)](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.3.0-purple.svg)](https://kotlinlang.org)
+[![Android](https://img.shields.io/badge/android-7.0%2B-green.svg)](https://developer.android.com)
 
-**Current version:** v1.3.0
+A native Android client for the [Ironjaw](https://github.com/scaso01/ironjaw)
+gateway. It gives you a phone-shaped front end for an assistant running on your
+own hardware, with no third-party service in the path and no account to sign in
+to.
 
-## What It Does
+Everything goes over one authenticated WebSocket to a gateway you control. Point
+it at a machine on your LAN, a VPN address, or a hostname behind your own reverse
+proxy, and that is the entire backend.
 
-Connects directly to the Ironjaw Gateway WebSocket over NordVPN Meshnet + Caddy reverse proxy with auto-TLS (DuckDNS), replicating the full Telegram bot UX without routing through any third-party servers. Meshnet-only by design: the phone must be on Meshnet, and nothing is exposed to the WAN. Beyond chat it is a phone-side control panel for the whole workstation/docker-host setup — Claude Code sessions, model switching, infrastructure status, and remote phone commands (HITL-gated).
+<p align="center">
+  <img src="docs/images/chat.png" alt="Dr. CLAW chat screen with a streamed assistant reply" width="280">
+  <img src="docs/images/sessions.png" alt="Dr. CLAW session list" width="280">
+  <img src="docs/images/settings.png" alt="Dr. CLAW settings screen" width="280">
+</p>
+
+## Why it exists
+
+Putting a chat UI on a self-hosted model usually means either a web page that
+forgets everything on refresh, or a Telegram bot, which routes your conversations
+through somebody else's servers to get a decent mobile experience.
+
+This is the third option. It behaves like the messaging apps it borrows from,
+streaming replies, swipe to reply, share sheet, notifications, offline history,
+while the transport stays a single socket to your own gateway.
+
+The design constraint throughout is that the phone is a bad place to lose state.
+History lives in an encrypted Room database, so the app opens instantly and stays
+readable with the gateway unreachable. A dropped connection reconnects and picks
+up the stream rather than restarting it.
 
 ## Features
 
-| Feature | Status |
-|---|---|
-| Live streaming (message edits as text arrives) | ✅ |
-| Rich Markdown rendering + code copy | ✅ |
-| Session management (create/switch/rename/delete) | ✅ |
-| Inline action buttons (suggestion chips) | ✅ |
-| Slash command menu (/new, /clear, /help) | ✅ |
-| Long-press actions (copy/share/reply/regenerate/delete) | ✅ |
-| Swipe-to-reply threading | ✅ |
-| Background WebSocket service (foreground service) | ✅ |
-| Notification channels (service + chat messages) | ✅ |
-| Share sheet integration (send text from other apps) | ✅ |
-| Photo/file attachments + camera capture | ✅ |
-| Voice input (Android STT, works offline) | ✅ |
-| Full-screen voice conversation mode | ✅ |
-| Conversation search | ✅ |
-| Quick actions bar (Summarize/Explain/Translate/Code) | ✅ |
-| Floating bubble overlay (Android 11+) | ✅ |
-| Clipboard detection + send preview | ✅ |
-| Settings (theme/instructions/gateway URL) | ✅ |
-| Persistent WebSocket (auto-reconnect, network-change fast reconnect) | ✅ |
-| Native agentic tool execution (tool cards, permission approvals) | ✅ |
-| Room local DB (instant history, pin/archive/fork, encrypted, FTS global search) | ✅ |
-| Claude Code session control (multi-machine list, attach, create, split view) | ✅ |
-| Model Manager (status, cross-system switching, role assignment) | ✅ |
-| System dashboard (infra, schedules, devices, metrics, vault, export, plugins) | ✅ |
-| Brain + Chronicle screens (Ironjaw memory, session archive) | ✅ |
-| ntfy push notifications (SSE, self-hosted) | ✅ |
-| Incoming phone-command approval gate (location/clipboard/calendar HITL) | ✅ |
+**Chat.** Live streaming with the message editing as tokens arrive, Markdown
+rendering with copyable code blocks, inline suggestion chips, slash commands, long
+press for copy, share, reply, regenerate and delete, and swipe to reply threading.
 
-## Tech Stack
+**Input.** Photo and file attachments, camera capture, voice input through Android
+speech recognition, which works offline, and a full screen voice conversation mode.
 
-- **Language:** Kotlin 2.3.0
-- **UI:** Jetpack Compose + Material Design 3 (BOM 2025.05.01)
-- **Networking:** OkHttp 4.12.0 WebSocket
-- **DI:** Hilt 2.57.2
-- **Persistence:** Room 2.7.1 (FTS4, encrypted)
-- **Architecture:** MVVM + Clean Architecture
-- **Markdown:** multiplatform-markdown-renderer-m3 v0.28.0
-- **Navigation:** Compose Navigation v2.9.0
-- **Camera:** CameraX v1.5.0
-- **Transport:** Ironjaw Gateway WebSocket via Caddy + DuckDNS
+**Sessions.** Create, rename, fork, pin, archive and delete. Full text search
+across all history via SQLite FTS. Everything is stored locally and encrypted.
 
-## Gateway Protocol
+**Agentic tools.** When the gateway runs a tool the app renders a tool card with
+live progress, and permission prompts surface as approve or deny dialogs rather
+than silently failing.
 
-Connects to `wss://gateway.example.com` using the Ironjaw Gateway WebSocket API:
+**System control.** Optional screens for the gateway's own subsystems: memory
+browser with an approval queue, infrastructure and device status, scheduled jobs,
+model management, a secrets vault and a session archive.
 
-- `chat.send` / `chat.send.multimodal` — send text or multimodal messages
-- `chat.history` — load session history
-- `chat.abort` — abort in-flight run
-- `chat.inject` — inject assistant note
-- `sessions.list` / `sessions.patch` / `sessions.delete` / `sessions.reset` — list, rename, delete, reset sessions (session context is per-request via `sessionKey`; there is no `sessions.switch` method)
-- `talk.mode` / `tts.convert` — voice conversation pipeline
-- Streaming via `chat` events (live typing effect)
-- Feature RPCs (`brain.*`, `vault.*`, `model.*`, `gateway.restart`, …) via generic request — full registry in the Ironjaw repo
+**Background.** A foreground service keeps the socket alive with automatic
+reconnect and fast recovery on network change, plus notification channels and an
+Android 11+ floating bubble.
 
-## Project Structure
+**Coding agent sessions.** List, attach to and create Claude Code sessions across
+machines, with a split view. This talks to the optional `cc-bridge` daemon, see
+below.
 
-Single-activity Compose app: `ui/` (one package per screen + shared `components/`), `data/` (transport clients, Room, one repository per feature), `service/` (foreground service, bubble, network monitor, accessibility), `cmd/` (HITL-gated incoming phone commands). Full package map: [CLAUDE.md → Project Structure](CLAUDE.md).
+## Requirements
 
-## Setup
+- Android 7.0 (API 24) or newer
+- JDK 21 and Android SDK 36 to build
+- A running [Ironjaw](https://github.com/scaso01/ironjaw) gateway and its auth token
+
+## Quick start
 
 ```bash
-# Clone with submodules (from re-lab root)
-git submodule update --init android/dr-claw-app
-
-# Copy secrets template and fill in values
+git clone https://github.com/scaso01/dr-claw-app.git
+cd dr-claw-app
 cp secrets.properties.example secrets.properties
-# GATEWAY_URL=wss://gateway.example.com
-# GATEWAY_TOKEN=<your-token>
-
-# Build
-./gradlew assembleDebug
-
-# Run on connected device
-./gradlew installDebug
 ```
 
-## Related
+Edit `secrets.properties` with your gateway address and token. `secrets.properties`
+is gitignored and its values are compiled into `BuildConfig`, so nothing is read
+from the filesystem at runtime:
 
-- [re-lab](../) — parent RE workspace
+```properties
+GATEWAY_URL=wss://gateway.example.com
+GATEWAY_TOKEN=the-token-your-gateway-is-configured-with
+```
+
+Then build and install:
+
+```bash
+./gradlew assembleDebug     # APK in app/build/outputs/apk/debug/
+./gradlew installDebug      # build and push to a connected device
+```
+
+The gateway URL can also be changed at runtime from the Settings screen, which is
+usually easier than rebuilding when you are moving between networks.
+
+## Configuration
+
+Everything in `secrets.properties` beyond the first two keys is optional.
+
+| Key | Purpose |
+|---|---|
+| `GATEWAY_URL` | WebSocket URL of your Ironjaw gateway, `ws://` or `wss://` |
+| `GATEWAY_TOKEN` | Bearer token the gateway expects |
+| `CC_BRIDGE_URL` | Direct WebSocket to a `cc-bridge` daemon. Blank routes coding-agent calls through the gateway instead |
+| `PHONE_CC_BRIDGE_URL` | A `cc-bridge` running on the phone itself, under Termux |
+| `PHONE_CC_BRIDGE_TOKEN` | That daemon's own token, which is not the gateway token |
+| `MESHNET_IP` | Pins the gateway hostname to a fixed address, skipping DNS on a VPN path |
+| `UI_BRIDGE_SECRET` | Shared secret gating the accessibility bridge that lets the assistant drive other apps |
+
+TLS is whatever your reverse proxy presents. The app does not pin certificates, so
+a normal publicly trusted certificate works with no extra configuration.
+
+## How it connects
+
+The app speaks Ironjaw's Protocol v4 over a single WebSocket.
+
+| Method | Purpose |
+|---|---|
+| `chat.send`, `chat.send.multimodal` | Send text or text plus attachments |
+| `chat.history` | Load a session's messages |
+| `chat.abort` | Stop an in-flight run |
+| `chat.inject` | Insert an assistant note without a model call |
+| `sessions.list`, `sessions.patch`, `sessions.delete`, `sessions.reset` | Session management. Session context is per request via `sessionKey`, there is no switch call |
+| `talk.mode`, `tts.convert` | Voice conversation pipeline |
+| `brain.*`, `vault.*`, `model.*`, `gateway.restart` | Feature RPCs backing the system screens |
+
+Streaming arrives as `chat` events, which is what produces the live typing effect.
+The full method registry lives in the [Ironjaw protocol
+reference](https://github.com/scaso01/ironjaw/blob/main/docs/protocol-v4.md).
+
+## Project layout
+
+Single activity Compose app.
+
+| Path | Contents |
+|---|---|
+| `app/src/main/java/.../ui/` | One package per screen, plus shared `components/` |
+| `app/src/main/java/.../data/` | Transport clients, Room database, one repository per feature |
+| `app/src/main/java/.../service/` | Foreground service, bubble, network monitor, accessibility bridge |
+| `app/src/main/java/.../cmd/` | Incoming phone commands, each behind an approval gate |
+| `cc-bridge/` | Optional Node daemon that owns Claude Code sessions, see its own README |
+| `phone-setup/` | Notes for running the bridge on the phone under Termux |
+
+## Testing
+
+```bash
+./gradlew test                    # JVM unit tests
+./gradlew connectedDebugAndroidTest   # instrumented, needs a device or emulator
+```
+
+There is also a UI suite driven by uiautomator2 against a running app:
+
+```bash
+pip install uiautomator2 pytest
+./app/src/test/e2e/run_e2e.sh
+```
+
+## Built with
+
+Kotlin 2.3.0, Jetpack Compose with Material 3, OkHttp for the WebSocket, Hilt for
+injection, Room 2.7.1 for local storage, and Compose Navigation. Architecture is
+MVVM over a clean-architecture split, and the `data/` layer avoids Android imports
+so it can be lifted into a multiplatform module.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

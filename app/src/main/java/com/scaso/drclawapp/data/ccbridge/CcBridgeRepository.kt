@@ -446,7 +446,7 @@ class CcBridgeRepository(
     /** Create a new Ironjaw-managed Claude session. */
     suspend fun createIronjawSession(
         message: String,
-        cwd: String = "C:\\Users\\deploy",
+        cwd: String = ".",
     ): ResponseFrame {
         val params = buildJsonObject {
             put("message", message)

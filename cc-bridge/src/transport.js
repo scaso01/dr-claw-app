@@ -3,6 +3,7 @@
 // persistent, multi-turn Claude Code sessions with real-time streaming.
 
 import { EventEmitter } from 'node:events';
+import path from 'node:path';
 
 // Lazy-loaded SDK reference (ESM dynamic import)
 let _query = null;
@@ -105,12 +106,13 @@ export class AgentSDKTransport extends EventEmitter {
 
     this._abortController = new AbortController();
 
-    // Claude CLI path: env override (e.g. phone/proot via CLAUDE_CLI_PATH), else the Windows
-    // npm default on workstation, else undefined → SDK uses its own bundled cli.js (Linux/proot).
-    // ponytail: env-driven, back-compat — Windows behavior is byte-identical to the old hardcode.
+    // Claude CLI path: env override first (e.g. phone/proot via CLAUDE_CLI_PATH), else the
+    // npm global location on Windows, else undefined → SDK uses its own bundled cli.js.
+    // ponytail: env-driven, no install-specific path baked in.
     const claudeCliPath = process.env.CLAUDE_CLI_PATH
-      || (process.platform === 'win32'
-          ? 'C:\\Users\\deploy\\AppData\\Roaming\\npm\\node_modules\\@anthropic-ai\\claude-code\\cli.js'
+      || (process.platform === 'win32' && process.env.APPDATA
+          ? path.join(process.env.APPDATA, 'npm', 'node_modules',
+                      '@anthropic-ai', 'claude-code', 'cli.js')
           : undefined);
 
     const sdkOptions = {

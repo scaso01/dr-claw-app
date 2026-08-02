@@ -55,7 +55,9 @@ fun CreateSessionDialog(
     onCreate: (cwd: String, project: String?, backend: String?, model: String?, permissionMode: String?, target: Machine) -> Unit = { _, _, _, _, _, _ -> },
     onCreateIronjaw: (message: String, cwd: String) -> Unit = { _, _ -> },
 ) {
-    val localCwd = "C:\\Users\\deploy"
+    // The phone cannot know where the gateway keeps code, so "." means whatever
+    // directory the gateway itself was started in. Type an absolute path to override.
+    val localCwd = "."
     val phoneCwd = "/root"
     var project by remember { mutableStateOf("") }
     var cwd by remember { mutableStateOf(localCwd) }
@@ -211,7 +213,7 @@ fun CreateSessionDialog(
                         value = cwd,
                         onValueChange = { cwd = it },
                         label = { Text("Working directory *") },
-                        placeholder = { Text("C:\\Users\\deploy") },
+                        placeholder = { Text("C:\\code\\my-project") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         isError = cwd.isBlank(),
@@ -341,7 +343,7 @@ fun CreateSessionDialog(
                         )
                         CreateDialogType.IRONJAW -> onCreateIronjaw(
                             message.trim(),
-                            cwd.trim().ifBlank { "C:\\Users\\deploy" },
+                            cwd.trim().ifBlank { "." },
                         )
                     }
                 },

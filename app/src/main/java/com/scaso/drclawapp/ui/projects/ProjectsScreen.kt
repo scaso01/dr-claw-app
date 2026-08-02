@@ -205,7 +205,7 @@ private fun ProjectCwdCard(
                 value = pathInput,
                 onValueChange = { pathInput = it },
                 label = { Text("Project path") },
-                placeholder = { Text("C:\\Users\\deploy\\Projects\\my-project") },
+                placeholder = { Text("C:\\code\\my-project") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )

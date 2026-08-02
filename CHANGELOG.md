@@ -540,17 +540,26 @@ Format: [Semantic Versioning](https://semver.org/)
 - Hilt dependency injection
 - Unit tests for all data layer classes
 - DuckDNS + Caddy reverse proxy transport (auto-TLS, works from anywhere)
-- DuckDNS IP updater scheduled task (queries Deco router for real WAN IP)
+- Dynamic DNS updater scheduled task (reads the real WAN IP from the router)
 - Caddy auto-start on login
 
-### Transport History
-- **Tailscale** (initial): Worked but conflicts with NordVPN on Android (one-VPN limitation)
-- **NordVPN Meshnet** (attempted): Unstable IPs (changed mid-session without notice), ~350ms latency, required fragile Python TCP proxy, Android cleartext traffic workarounds
-- **Port forward + DuckDNS + Caddy** (final): Permanent `wss://` URL, ~5-20ms latency, Let's Encrypt TLS via DNS-01, works from any network worldwide
+### Transport history
 
-### Infrastructure
-- Caddy v2.11.1 with DuckDNS plugin at `C:\Caddy\`
-- DuckDNS subdomain: `gateway.example.com`
-- Deco BE63 port forward: 443/TCP â†’ docker-host (192.0.2.51:443)
-- Deco DHCP reservation for docker-host at .51
-- NordVPN DNS resolver (103.86.96.100) for Caddy ACME challenges
+Three approaches were tried before settling on the third. Recorded because the
+first two fail in ways that are not obvious up front.
+
+- **Mesh VPN, overlay style**: works, but Android permits only one VPN at a time,
+  so it is mutually exclusive with any commercial VPN client on the phone.
+- **Mesh VPN, peer-to-peer style**: addresses changed mid-session without notice,
+  latency around 350ms, and it needed a TCP proxy plus cleartext-traffic
+  exceptions on Android to work at all.
+- **Reverse proxy with dynamic DNS** (chosen): a stable `wss://` URL, single digit
+  to low tens of milliseconds on the local network, and a real certificate issued
+  over a DNS-01 challenge so it works from any network without a VPN.
+
+### Deployment shape
+
+Any reverse proxy that terminates TLS will do. The setup this was developed
+against is a dynamic DNS hostname pointed at the proxy, which holds the
+certificate and forwards to the gateway on the internal network. Configure a
+resolver the ACME client can reach if your DNS provider is behind a VPN.

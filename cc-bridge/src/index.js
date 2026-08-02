@@ -8,6 +8,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { WebSocketServer } = require('ws');
 const { createWsHandler } = require('./ws-handler');
@@ -16,18 +17,23 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 18790;
-const LOCAL_SESSIONS_DIR = path.join(process.env.USERPROFILE || 'C:\\Users\\deploy', '.claude', 'projects');
-const REMOTE_SESSIONS_DIR = path.join(process.env.USERPROFILE || 'C:\\Users\\deploy', 'docker-host-claude', 'projects');
-const DEFAULT_CWD = path.join(process.env.USERPROFILE || 'C:\\Users\\deploy', 'Projects');
+// os.homedir() falls back to the password database when USERPROFILE and HOME are
+// both unset, which is the case a service account hits.
+const HOME = process.env.USERPROFILE || process.env.HOME || os.homedir();
+const LOCAL_SESSIONS_DIR = path.join(HOME, '.claude', 'projects');
+const REMOTE_SESSIONS_DIR = path.join(HOME, 'docker-host-claude', 'projects');
+const DEFAULT_CWD = process.env.CC_BRIDGE_CWD || process.cwd();
 const DEFAULT_TIMEOUT_MS = 120_000;
 const CC_BRIDGE_TOKEN = process.env.CC_BRIDGE_TOKEN || '';
 const TITLE_CACHE_PATH = path.join(__dirname, '..', 'data', 'titles.json');
 
-// On Windows, claude is an npm .cmd shim — use full hardcoded path + shell:true
-// (NSSM service runs as deploy; APPDATA env may not be set correctly in service context)
+// On Windows, claude is an npm .cmd shim, which needs shell:true to spawn. Run as
+// a service, APPDATA is often wrong or missing, so allow an explicit override and
+// fall back to the bare name for PATH resolution.
 const CLAUDE_CMD = process.platform === 'win32'
-  ? 'C:\\Users\\deploy\\AppData\\Roaming\\npm\\claude.cmd'
-  : 'claude';
+  ? (process.env.CLAUDE_CMD
+     || (process.env.APPDATA ? path.join(process.env.APPDATA, 'npm', 'claude.cmd') : 'claude.cmd'))
+  : (process.env.CLAUDE_CMD || 'claude');
 const SPAWN_OPTS_BASE = process.platform === 'win32' ? { shell: true } : {};
 
 // ─── Title Cache ─────────────────────────────────────────────────────────────
@@ -279,7 +285,7 @@ function scanSessions(dir, results, machine) {
         if (Object.keys(titleCache.titles).length > prevCacheSize) cacheChanged = true;
 
         // Derive project name from cwd
-        const projectsRoot = path.join(process.env.USERPROFILE || 'C:\\Users\\deploy', 'Projects');
+        const projectsRoot = path.join(HOME, 'Projects');
         let project = null;
         if (cwd) {
           const rel = path.relative(projectsRoot, cwd);

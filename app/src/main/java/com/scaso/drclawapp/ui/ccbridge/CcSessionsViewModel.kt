@@ -289,7 +289,7 @@ class CcSessionsViewModel @Inject constructor(
 
     fun createIronjawSession(
         message: String,
-        cwd: String = "C:\\Users\\deploy",
+        cwd: String = ".",
     ) {
         viewModelScope.launch {
             dismissIronjawCreateDialog()
