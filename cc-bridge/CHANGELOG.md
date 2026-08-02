@@ -57,17 +57,17 @@ All notable changes to cc-bridge will be documented in this file.
 ### Fixed
 
 - **NSSM service USERPROFILE bug** — Service runs as `LocalSystem`; `USERPROFILE` resolved to the system account, causing `claude` to fail finding `~/.claude/` session files. Fixed by injecting correct user env vars via `AppEnvironmentExtra`:
-  `USERPROFILE=C:\Users\deploy APPDATA=C:\Users\deploy\AppData\Roaming LOCALAPPDATA=C:\Users\deploy\AppData\Local HOME=C:\Users\deploy`
+  `USERPROFILE=C:\Users\<you> APPDATA=C:\Users\<you>\AppData\Roaming LOCALAPPDATA=C:\Users\<you>\AppData\Local HOME=C:\Users\<you>`
 
 - **stdin hang** — `spawn()` did not close stdin; `claude` blocked waiting for input indefinitely. Fixed with `stdio: ['ignore', 'pipe', 'pipe']` in spawn options.
 
 - **`--resume` on non-UUID sessionId** — `--resume` was always passed, even for new/non-existent sessions, causing immediate error: `"--resume requires a valid session ID when used with --print"`. Fixed: `--resume` is now only passed when `sessionId` matches UUID format (`/^[0-9a-f]{8}-...-[0-9a-f]{12}$/i`). Non-UUID sessionIds start a fresh session.
 
-- **`claude.cmd` path resolution** — Used `process.env.APPDATA` to build the `claude` path, which is unreliable in NSSM service context. Fixed by hardcoding the full path: `C:\Users\deploy\AppData\Roaming\npm\claude.cmd`.
+- **`claude.cmd` path resolution** — Used `process.env.APPDATA` to build the `claude` path, which is unreliable in NSSM service context. Fixed by hardcoding the full path: `C:\Users\<you>\AppData\Roaming\npm\claude.cmd`.
 
 ### Changed
 
-- `spawn('claude', ...)` → `spawn('C:\\Users\\deploy\\AppData\\Roaming\\npm\\claude.cmd', ...)` with `shell: true` (required for `.cmd` files on Windows)
+- `spawn('claude', ...)` → `spawn('C:\\Users\\<you>\\AppData\\Roaming\\npm\\claude.cmd', ...)` with `shell: true` (required for `.cmd` files on Windows)
 - Added `SPAWN_OPTS_BASE` constant for platform-aware spawn options
 - Added `UUID_RE` constant and `isExistingSession` check before building args array
 

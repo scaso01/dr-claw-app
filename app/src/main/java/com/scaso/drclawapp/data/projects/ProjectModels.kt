@@ -49,72 +49,38 @@ data class ProjectInfo(
     val statusRpcSupported: Boolean = false,
 )
 
-// Dashboard URLs use gateway.example.com through Caddy HTTPS proxy.
-// Proxy port scheme: 20000 + original_port (e.g. 8502 → 28502).
-// Works on both internal WiFi and external 5G — all traffic goes through Caddy TLS.
+// The Projects tab is deployment specific: replace these entries with your own
+// services. `dashboardUrl` renders a link out to a web UI, and
+// `statusRpcSupported` makes the tile poll the gateway for live pipeline status.
+//
+// Dashboard URLs go through the same reverse proxy as the gateway itself, so one
+// certificate covers everything and the tiles work off the local network. The port
+// scheme below is 20000 plus the service's own port, which is a convention rather
+// than a requirement.
 private const val GW = "gateway.example.com"
 
 val ALL_PROJECTS = listOf(
     ProjectInfo(
         name = "Ironjaw",
-        description = "Rust WebSocket gateway (16 crates, axum)",
-        // Dashboard is the web version of Dr. CLAW — no need to link from within the app
+        description = "The gateway this app connects to",
+        // The gateway's own dashboard is the web equivalent of this app, so there
+        // is nothing useful to link to from inside it.
     ),
+    // The one entry wired to live status. ProjectsViewModel matches on this exact
+    // name, so rename it in both places or the tile stops updating.
     ProjectInfo(
         name = "ExamplePipeline",
-        description = "Job scraper pipeline (3153+ tests)",
+        description = "A scheduled job reporting live status over RPC",
         dashboardUrl = "https://$GW:28502",
         statusRpcSupported = true,
     ),
     ProjectInfo(
-        name = "herby-strout",
-        description = "Social media automation for Matt Strout",
-        dashboardUrl = "https://dashboard.example.com",
-    ),
-    ProjectInfo(
-        name = "ColorCatalog",
-        description = "Paint color cataloging app (Android + Web)",
-        dashboardUrl = "https://$GW:28085",
-    ),
-    ProjectInfo(
-        name = "cc-chronicle",
-        description = "CC session transcript indexer & dashboard",
-        dashboardUrl = "https://$GW:38793",
-    ),
-    ProjectInfo(
-        name = "quant-tools",
-        description = "Multi-asset quantitative finance toolkit (1018+ tests)",
+        name = "example-dashboard",
+        description = "A web service reachable through the reverse proxy",
         dashboardUrl = "https://$GW:28503",
     ),
     ProjectInfo(
-        name = "osint-toolkit",
-        description = "OSINT investigation workbench (97 tools, 211 tests)",
-        dashboardUrl = "https://$GW:28088",
-    ),
-    ProjectInfo(
-        name = "link-monitor",
-        description = "Docker ISP monitoring stack (8 containers)",
-        dashboardUrl = "https://$GW:23003",
-    ),
-    ProjectInfo(
         name = "llama-server",
-        description = "Local LLM inference (Qwen3.5 35B MoE)",
-        // No proxy — port 28080 is SearXNG on docker-host, not workstation's llama-server
-    ),
-    ProjectInfo(
-        name = "mesh-monitor",
-        description = "TUI network dashboard for Deco mesh",
-    ),
-    ProjectInfo(
-        name = "awesome-aggregator",
-        description = "Content dashboard (22 tests)",
-    ),
-    ProjectInfo(
-        name = "re-lab",
-        description = "Multi-platform reverse engineering environment",
-    ),
-    ProjectInfo(
-        name = "monster-search",
-        description = "Python client + CLI for search engines (8 engines)",
+        description = "Local LLM inference, no dashboard of its own",
     ),
 )

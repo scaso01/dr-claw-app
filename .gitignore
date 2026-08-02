@@ -19,7 +19,12 @@ version.properties
 /cc-bridge/cc-bridge*.log
 /cc-bridge/*.sync-conflict-*
 /data/
-hs_err_pid12472.log
+hs_err_pid*.log
+.kotlin/
+
+# python bytecode from the uiautomator2 e2e harness
+__pycache__/
+*.pyc
 
 # graphify output
 graphify-out/

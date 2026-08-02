@@ -2,8 +2,8 @@
 # Run Dr. CLAW E2E tests using uiautomator2 + pytest.
 #
 # Prerequisites:
-#   - Emulator running (emu-start)
-#   - App installed (emu-build or gradlew installDebug)
+#   - An emulator or device connected (emulator -avd <name>)
+#   - App installed (./gradlew installDebug)
 #   - pip install uiautomator2 pytest
 #
 # Usage:
@@ -17,13 +17,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Verify emulator is connected
 if ! adb devices 2>/dev/null | grep -q "device$"; then
-    echo "ERROR: No emulator/device connected. Run 'emu-start' first."
+    echo "ERROR: No emulator/device connected. Start one with 'emulator -avd <name>'."
     exit 1
 fi
 
 # Verify app is installed
 if ! adb shell pm list packages 2>/dev/null | grep -q "com.scaso.drclawapp"; then
-    echo "ERROR: Dr. CLAW app not installed. Run 'emu-build' first."
+    echo "ERROR: Dr. CLAW app not installed. Run './gradlew installDebug' first."
     exit 1
 fi
 

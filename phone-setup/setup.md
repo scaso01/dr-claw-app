@@ -12,7 +12,7 @@ The Termux:API dialog gate (`termux-dialog confirm`) only surfaces from the back
 can draw over other apps **and** is battery-exempt. Without this, approval popups silently never appear.
 
 ```bash
-ADB="C:/Users/deploy/AppData/Local/Android/Sdk/platform-tools/adb.exe"
+ADB="adb"   # or the full path to platform-tools/adb.exe if it is not on PATH
 "$ADB" connect 198.51.100.206:<wireless-debug-port>     # port rotates per reboot
 "$ADB" shell appops set com.termux.api SYSTEM_ALERT_WINDOW allow
 "$ADB" shell dumpsys deviceidle whitelist +com.termux.api
