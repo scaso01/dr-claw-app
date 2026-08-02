@@ -168,3 +168,6 @@ so it can be lifted into a multiplatform module.
 ## License
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
+
+Bundled third-party components and their licences are listed in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
