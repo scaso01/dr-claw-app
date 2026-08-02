@@ -36,7 +36,7 @@ class NativeChatEventTest {
 
     @Before
     fun setup() {
-        fakeEvents = MutableSharedFlow(extraBufferCapacity = 64)
+        fakeEvents = MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
         fakeConnectionState = MutableStateFlow(ConnectionState.Disconnected)
         val fakeClient = FakeNativeGatewayClient(fakeEvents, fakeConnectionState)
         repository = ChatRepository(fakeClient, scope)
@@ -46,12 +46,15 @@ class NativeChatEventTest {
      * Suspends until [ChatRepository]'s collector has actually subscribed to
      * [fakeEvents].
      *
-     * The repository collects on [Dispatchers.Default], and a SharedFlow with no
-     * replay discards anything emitted while it has no subscriber. Awaiting an item
-     * from `repository.messages` does not establish that subscription, because that
-     * is a separate flow whose initial value arrives the moment Turbine subscribes
-     * to it. Without this wait the first emission is dropped whenever the collector
-     * loses the race, which is load dependent and so fails only sometimes.
+     * The repository collects on [Dispatchers.Default], so it may not have
+     * subscribed by the time a test starts emitting. Awaiting an item from
+     * `repository.messages` does not establish that it has, because that is a
+     * separate flow whose initial value arrives the moment Turbine subscribes to it.
+     *
+     * The replay buffer on [fakeEvents] is what actually makes the ordering safe,
+     * since a late subscriber still receives what it missed. This wait additionally
+     * pins the ordering for assertions that care when an event was observed rather
+     * than only that it was.
      */
     private suspend fun awaitCollector() = fakeEvents.subscriptionCount.first { it > 0 }
 

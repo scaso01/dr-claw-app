@@ -63,7 +63,7 @@ class ChatViewModelPermissionTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         scope = CoroutineScope(SupervisorJob() + testDispatcher)
-        fakeEvents = MutableSharedFlow(extraBufferCapacity = 64)
+        fakeEvents = MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
         fakeConnectionState = MutableStateFlow(ConnectionState.Disconnected)
         fakePreferences = FakePermissionAppPreferences()
         fakeGateway = FakePermissionGatewayClient(fakeEvents, fakeConnectionState)

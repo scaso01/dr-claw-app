@@ -52,7 +52,7 @@ class ChatRepositoryPersistenceTest {
         fakeMessageDao = FakePersistenceMessageDao()
         fakeToolEventDao = FakePersistenceToolEventDao()
 
-        fakeEvents = MutableSharedFlow(extraBufferCapacity = 64)
+        fakeEvents = MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
         val fakeConnectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
         val fakeClient = PersistenceFakeGatewayClient(fakeEvents, fakeConnectionState)
 

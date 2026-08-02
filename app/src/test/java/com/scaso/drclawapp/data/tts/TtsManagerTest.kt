@@ -160,7 +160,7 @@ private class FakeTtsGatewayClient : GatewayClient(
         MutableStateFlow(ConnectionState.Connected(fakeHelloOk()))
 
     override val events: SharedFlow<GatewayEvent> =
-        MutableSharedFlow(extraBufferCapacity = 64)
+        MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
 
     override suspend fun convertTextToSpeech(text: String, voice: String?): ResponseFrame {
         calls++

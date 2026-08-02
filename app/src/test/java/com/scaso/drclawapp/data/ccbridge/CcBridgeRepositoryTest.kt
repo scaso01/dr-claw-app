@@ -201,7 +201,7 @@ private class FakeCcBridgeGatewayClient : GatewayClient(
         MutableStateFlow(ConnectionState.Disconnected)
 
     override val events: SharedFlow<GatewayEvent> =
-        MutableSharedFlow(extraBufferCapacity = 64)
+        MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
 
     override suspend fun sendGenericRequest(
         method: String,

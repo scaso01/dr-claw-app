@@ -146,7 +146,7 @@ private class FakeInfraGatewayClient : GatewayClient(
     override val connectionState: StateFlow<ConnectionState> = fakeConnectionState
 
     override val events: SharedFlow<GatewayEvent> =
-        MutableSharedFlow(extraBufferCapacity = 64)
+        MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
 
     override suspend fun sendGenericRequest(
         method: String,

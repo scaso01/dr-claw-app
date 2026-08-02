@@ -33,7 +33,7 @@ class ChatRepositoryTest {
 
     @Before
     fun setup() {
-        fakeEvents = MutableSharedFlow(extraBufferCapacity = 64)
+        fakeEvents = MutableSharedFlow(replay = 64, extraBufferCapacity = 64)
         fakeConnectionState = MutableStateFlow(ConnectionState.Disconnected)
         fakeClient = FakeGatewayClient(fakeEvents, fakeConnectionState)
         repository = ChatRepository(fakeClient, scope)

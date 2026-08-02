@@ -41,7 +41,7 @@ class SessionRepositoryTest {
 
     @Before
     fun setup() {
-        val fakeEvents = MutableSharedFlow<GatewayEvent>(extraBufferCapacity = 64)
+        val fakeEvents = MutableSharedFlow<GatewayEvent>(replay = 64, extraBufferCapacity = 64)
         val fakeConnectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
         fakeGateway = FakeSessionGatewayClient(fakeEvents, fakeConnectionState)
         fakeChatRepo = ChatRepository(fakeGateway, scope)
