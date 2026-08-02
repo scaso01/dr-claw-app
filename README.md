@@ -1,7 +1,7 @@
 # Dr. CLAW
 
 [![CI](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml/badge.svg)](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.3.0-purple.svg)](https://kotlinlang.org)
 [![Android](https://img.shields.io/badge/android-7.0%2B-green.svg)](https://developer.android.com)
 
@@ -167,4 +167,4 @@ so it can be lifted into a multiplatform module.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+GPL-3.0-or-later. See [LICENSE](LICENSE).
