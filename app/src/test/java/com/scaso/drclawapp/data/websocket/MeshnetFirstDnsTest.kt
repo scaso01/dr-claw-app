@@ -55,7 +55,7 @@ class MeshnetFirstDnsTest {
         var ip = "198.51.100.41"
         val dns = MeshnetFirstDns(host, { ip }, fakeSystem("203.0.113.9"))
         assertEquals(InetAddress.getByName("198.51.100.41"), dns.lookup(host)[0])
-        ip = "100.99.99.99"
-        assertEquals(InetAddress.getByName("100.99.99.99"), dns.lookup(host)[0])
+        ip = "198.51.100.99"
+        assertEquals(InetAddress.getByName("198.51.100.99"), dns.lookup(host)[0])
     }
 }
