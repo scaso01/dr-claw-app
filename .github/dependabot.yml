@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # The version catalog already holds exact versions, so this is the only update path.
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      all-dependencies:
+        patterns: ["*"]

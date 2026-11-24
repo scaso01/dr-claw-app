@@ -39,3 +39,11 @@ jobs:
         with:
           name: test-reports
           path: app/build/reports/tests/
+
+  # The one check branch protection requires, so job changes never strand a merge.
+  ci-ok:
+    if: always()
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.build.result }}" = success
