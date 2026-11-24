@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # The version catalog already holds exact versions, so this is the only update path.
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      all-dependencies:
+        patterns: ["*"]
+    ignore:
+      # Installs use the lockfile, so a major release reaches nobody until it is adopted
+      # on purpose. Majors are upgraded by hand; this group carries minor and patch only.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
