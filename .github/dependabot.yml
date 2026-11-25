@@ -13,7 +13,3 @@ updates:
       # on purpose. Majors are upgraded by hand; this group carries minor and patch only.
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-      # Android Gradle plugin 8.13.2 uses a Gradle internal API that Gradle 9.6.0 removed,
-      # so the build fails on 9.6+. Lift this when the plugin moves to 9.x.
-      - dependency-name: gradle-wrapper
-        versions: [">=9.6.0"]

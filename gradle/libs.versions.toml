@@ -1,12 +1,12 @@
 [versions]
-androidGradlePlugin = "8.13.2"
+androidGradlePlugin = "9.5.2"
 kotlin = "2.3.0"
 ksp = "2.3.4"
 compose = "1.10.2"
 composeBom = "2025.05.01"
 material3 = "1.4.0"
 lifecycle = "2.10.0"
-hilt = "2.57.2"
+hilt = "2.60.1"
 okhttp = "4.12.0"
 kotlinxSerializationJson = "1.8.1"
 coroutines = "1.10.2"
@@ -113,7 +113,6 @@ hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", vers
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
