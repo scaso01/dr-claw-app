@@ -51,7 +51,7 @@ fun MarkdownContent(
         modifier = modifier,
         components = markdownComponents(
             codeFence = { model ->
-                MarkdownCodeFence(model.content, model.node) { code, _ ->
+                MarkdownCodeFence(model.content, model.node) { code, _, _ ->
                     CodeBlockWithCopyButton(
                         code = code,
                         onCopy = {
@@ -61,7 +61,7 @@ fun MarkdownContent(
                 }
             },
             codeBlock = { model ->
-                MarkdownCodeBlock(model.content, model.node) { code, _ ->
+                MarkdownCodeBlock(model.content, model.node) { code, _, _ ->
                     CodeBlockWithCopyButton(
                         code = code,
                         onCopy = {
