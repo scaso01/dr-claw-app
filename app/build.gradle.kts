@@ -26,7 +26,7 @@ val autoVersionCode = (versionProps.getProperty("versionCode", "18").toInt()).al
 
 android {
     namespace = "com.scaso.drclawapp"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.scaso.drclawapp"
