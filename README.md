@@ -170,8 +170,8 @@ pip install uiautomator2 pytest
 
 ## Built with
 
-Kotlin 2.3.0, Jetpack Compose with Material 3, OkHttp for the WebSocket, Hilt for
-injection, Room 2.7.1 for local storage, and Compose Navigation. Architecture is
+Kotlin, Jetpack Compose with Material 3, OkHttp for the WebSocket, Hilt for
+injection, Room for local storage, and Compose Navigation. Architecture is
 MVVM over a clean-architecture split, and the `data/` layer avoids Android imports
 so it can be lifted into a multiplatform module.
 
