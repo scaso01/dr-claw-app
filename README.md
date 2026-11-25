@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml/badge.svg)](https://github.com/scaso01/dr-claw-app/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.3.0-purple.svg)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/language-kotlin-purple.svg)](https://kotlinlang.org)
 [![Android](https://img.shields.io/badge/android-7.0%2B-green.svg)](https://developer.android.com)
 
 A native Android client for the [Ironjaw](https://github.com/scaso01/ironjaw)
@@ -66,7 +66,7 @@ below.
 ## Requirements
 
 - Android 7.0 (API 24) or newer
-- JDK 21 and Android SDK 36 to build
+- JDK 21 and Android SDK 37 to build
 - A running [Ironjaw](https://github.com/scaso01/ironjaw) gateway and its auth token
 
 ## Quick start
