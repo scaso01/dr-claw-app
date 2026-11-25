@@ -111,7 +111,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
     // Force kotlin-metadata-jvm to match Kotlin 2.3.0 (Dagger 2.57+ unshaded it)
-    ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
+    ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.21")
 
     // Network
     implementation(libs.okhttp)
